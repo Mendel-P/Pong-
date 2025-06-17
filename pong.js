@@ -3,6 +3,9 @@ const ctx = canvas.getContext("2d");
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
+var playerouts = 0;
+//variable if it should be time or times
+var time = "times"
 
 // Paddle settings
 const PADDLE_WIDTH = 15;
@@ -118,6 +121,11 @@ function update() {
 
     // Ball out of bounds (left/right) - reset ball
     if (ball.x < 0 || ball.x + ball.size > WIDTH) {
+        playerouts ++
+        if (playerouts = 1)
+        { time = "time"; }
+        else { time = "times"; }
+        alert("you have gotten out " + playerouts + time )
         resetBall();
     }
 
