@@ -125,7 +125,7 @@ function update() {
         if (playerouts === 1)
         { time = "time"; }
         else { time = "times"; }
-        alert("you have gotten out " + playerouts + time )
+        alert("you have gotten out " + playerouts + " " + time )
         resetBall();
     }
 
