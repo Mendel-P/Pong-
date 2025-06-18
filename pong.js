@@ -3,19 +3,25 @@ const ctx = canvas.getContext("2d");
 
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
-var playerouts = 0;
-//variable if it should be time or times
-var time = "times"
 
 // Paddle settings
 const PADDLE_WIDTH = 15;
 const PADDLE_HEIGHT = 100;
 const PADDLE_MARGIN = 10;
-const PADDLE_SPEED = 6;
+const PADDLE_SPEED = 20;
 
 // Ball settings
 const BALL_SIZE = 18;
-const BALL_SPEED = 6;
+let proposed_speed = Number(prompt("How fast do you want the ball to go?\nSuggested is around 6"));
+while (proposed_speed < 1 || proposed_speed > 20 || isNaN(proposed_speed)) {
+  proposed_speed = Number(prompt("Please keep your number between 1 and 20"));
+}
+const BALL_SPEED = proposed_speed;
+
+//point system
+var playerouts = 0
+var time 
+var shouldstop = 0
 
 // Player Paddle
 let leftPaddle = {
@@ -56,6 +62,7 @@ canvas.addEventListener("mousemove", function (e) {
 
 // Draw everything
 function draw() {
+//if (shouldstop === 1) {return}
     // Clear
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
@@ -79,6 +86,7 @@ function draw() {
 
 // Update game objects
 function update() {
+//if (shouldstop === 1 ) {return}
     // Move ball
     ball.x += ball.dx;
     ball.y += ball.dy;
@@ -121,11 +129,23 @@ function update() {
 
     // Ball out of bounds (left/right) - reset ball
     if (ball.x < 0 || ball.x + ball.size > WIDTH) {
-        playerouts ++
-        if (playerouts === 1)
-        { time = "time"; }
-        else { time = "times"; }
-        alert("you have gotten out " + playerouts + " " + time )
+	     playerouts ++
+		  if (playerouts === 1) 
+		  {time = "time";}
+		  else {time = "times";}
+	 if (playerouts > 9) {
+	 
+shouldstop = 1
+// Show "Game Over" message:
+const gameOverDiv = document.createElement("div");
+gameOverDiv.textContent = "Game Over";
+gameOverDiv.style.fontSize = "100px";
+gameOverDiv.style.color = "red";
+gameOverDiv.style.textAlign = "center";
+document.body.appendChild(gameOverDiv);
+return
+}
+		  alert("you have gotten out " + playerouts + " " + time + ", the limit is ten")
         resetBall();
     }
 
@@ -150,8 +170,13 @@ function resetBall() {
     ball.dy = BALL_SPEED * (Math.random() * 2 - 1);
 }
 
+
+
 // Main loop
 function loop() {
+if (shouldstop === 1) {
+ctx.clearRect(0, 0, WIDTH, HEIGHT);
+return}
     update();
     draw();
     requestAnimationFrame(loop);
